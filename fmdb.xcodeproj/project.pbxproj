@@ -15,7 +15,7 @@
 		621721B61892BFE30006691F /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9E4EB813B31188005F9210 /* FMDatabasePool.m */; };
 		6290CBB7188FE836009790F8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6290CBB6188FE836009790F8 /* Foundation.framework */; };
 		67CB1E3019AD27D000A3CA7F /* FMDatabaseFTS3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 67CB1E2F19AD27D000A3CA7F /* FMDatabaseFTS3Tests.m */; };
-		8314AF3318CD73D600EC0E25 /* FMDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 8314AF3218CD73D600EC0E25 /* FMDB.h */; };
+		8314AF3318CD73D600EC0E25 /* FMDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 8314AF3218CD73D600EC0E25 /* FMDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8DD76F9C0486AA7600D96B5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB779EFE84155DC02AAC07 /* Foundation.framework */; };
 		8DD76F9F0486AA7600D96B5E /* fmdb.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859EA3029092ED04C91782 /* fmdb.1 */; };
 		BF5D041918416BB2008C5AA9 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF5D041818416BB2008C5AA9 /* XCTest.framework */; };
@@ -341,10 +341,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8314AF3318CD73D600EC0E25 /* FMDB.h in Headers */,
 				EE42910712B42FC90088BD94 /* FMDatabase.h in Headers */,
 				EE42910612B42FC30088BD94 /* FMDatabaseAdditions.h in Headers */,
 				EE42910912B42FD00088BD94 /* FMResultSet.h in Headers */,
-				8314AF3318CD73D600EC0E25 /* FMDB.h in Headers */,
 				CC9E4EBA13B31188005F9210 /* FMDatabasePool.h in Headers */,
 				CC47A00F148581E9002CCDAB /* FMDatabaseQueue.h in Headers */,
 			);
