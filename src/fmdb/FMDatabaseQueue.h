@@ -128,7 +128,7 @@
 
 /** Close database used by queue. */
 
-- (void)close;
+- (BOOL)close;
 
 ///-----------------------------------------------
 /// @name Dispatching database operations to queue

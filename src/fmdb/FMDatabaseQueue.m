@@ -106,14 +106,16 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
 #endif
 }
 
-- (void)close {
+- (BOOL)close {
     FMDBRetain(self);
+    __block BOOL result;
     dispatch_sync(_queue, ^() {
-        [self->_db close];
+        result = [self->_db close];
         FMDBRelease(_db);
         self->_db = 0x00;
     });
     FMDBRelease(self);
+    return result;
 }
 
 - (FMDatabase*)database {
