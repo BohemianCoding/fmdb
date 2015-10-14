@@ -183,11 +183,15 @@
     int  rc;
     BOOL retry;
     BOOL triedFinalizingOpenStatements = NO;
+    BOOL closeSucceeded = NO;
     
     do {
         retry   = NO;
         rc      = sqlite3_close(_db);
-        if (SQLITE_BUSY == rc || SQLITE_LOCKED == rc) {
+        if (rc == SQLITE_OK) {
+            closeSucceeded = YES;
+        }
+        else if (SQLITE_BUSY == rc || SQLITE_LOCKED == rc) {
             if (!triedFinalizingOpenStatements) {
                 triedFinalizingOpenStatements = YES;
                 sqlite3_stmt *pStmt;
@@ -198,14 +202,14 @@
                 }
             }
         }
-        else if (SQLITE_OK != rc) {
+        else {
             NSLog(@"error closing!: %d", rc);
         }
     }
     while (retry);
     
     _db = nil;
-    return YES;
+    return closeSucceeded;
 }
 
 #pragma mark Busy handler routines
