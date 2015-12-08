@@ -67,12 +67,12 @@
 }
 
 + (NSString*)FMDBUserVersion {
-    return @"2.3";
+    return @"2.5";
 }
 
-// returns 0x0230 for version 2.3.  This makes it super easy to do things like:
-// /* need to make sure to do X with FMDB version 2.3 or later */
-// if ([FMDatabase FMDBVersion] >= 0x0230) { … }
+// returns 0x0240 for version 2.4.  This makes it super easy to do things like:
+// /* need to make sure to do X with FMDB version 2.4 or later */
+// if ([FMDatabase FMDBVersion] >= 0x0240) { … }
 
 + (SInt32)FMDBVersion {
     
@@ -151,11 +151,14 @@
 
 #if SQLITE_VERSION_NUMBER >= 3005000
 - (BOOL)openWithFlags:(int)flags {
+    return [self openWithFlags:flags vfs:nil];
+}
+- (BOOL)openWithFlags:(int)flags vfs:(NSString *)vfsName {
     if (_db) {
         return YES;
     }
 
-    int err = sqlite3_open_v2([self sqlitePath], &_db, flags, NULL /* Name of VFS module to use */);
+    int err = sqlite3_open_v2([self sqlitePath], &_db, flags, [vfsName UTF8String]);
     if(err != SQLITE_OK) {
         NSLog(@"error opening!: %d", err);
         return NO;
@@ -235,7 +238,11 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
     NSTimeInterval delta = [NSDate timeIntervalSinceReferenceDate] - (self->_startBusyRetryTime);
     
     if (delta < [self maxBusyRetryTimeInterval]) {
-        sqlite3_sleep(50); // milliseconds
+        int requestedSleepInMillseconds = (int) arc4random_uniform(50) + 50;
+        int actualSleepInMilliseconds = sqlite3_sleep(requestedSleepInMillseconds);
+        if (actualSleepInMilliseconds != requestedSleepInMillseconds) {
+            NSLog(@"WARNING: Requested sleep of %i milliseconds, but SQLite returned %i. Maybe SQLite wasn't built with HAVE_USLEEP=1?", requestedSleepInMillseconds, actualSleepInMilliseconds);
+        }
         return 1;
     }
     
@@ -274,6 +281,7 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
 }
 
 - (void)setBusyRetryTimeout:(int)i {
+#pragma unused(i)
     NSLog(@"%s:%d", __FUNCTION__, __LINE__);
     NSLog(@"FMDB: setBusyRetryTimeout does nothing, please use setMaxBusyRetryTimeInterval:");
 }
@@ -368,6 +376,7 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
     
     return (rc == SQLITE_OK);
 #else
+#pragma unused(keyData)
     return NO;
 #endif
 }
@@ -388,6 +397,7 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
     
     return (rc == SQLITE_OK);
 #else
+#pragma unused(keyData)
     return NO;
 #endif
 }
@@ -901,6 +911,14 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
     return [self executeQuery:sql withArgumentsInArray:arguments orDictionary:nil orVAList:nil];
 }
 
+- (FMResultSet *)executeQuery:(NSString *)sql values:(NSArray *)values error:(NSError * __autoreleasing *)error {
+    FMResultSet *rs = [self executeQuery:sql withArgumentsInArray:values orDictionary:nil orVAList:nil];
+    if (!rs && error) {
+        *error = [self lastError];
+    }
+    return rs;
+}
+
 - (FMResultSet *)executeQuery:(NSString*)sql withVAList:(va_list)args {
     return [self executeQuery:sql withArgumentsInArray:nil orDictionary:nil orVAList:args];
 }
@@ -1113,6 +1131,10 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
     return [self executeUpdate:sql error:nil withArgumentsInArray:arguments orDictionary:nil orVAList:nil];
 }
 
+- (BOOL)executeUpdate:(NSString*)sql values:(NSArray *)values error:(NSError * __autoreleasing *)error {
+    return [self executeUpdate:sql error:error withArgumentsInArray:values orDictionary:nil orVAList:nil];
+}
+
 - (BOOL)executeUpdate:(NSString*)sql withParameterDictionary:(NSDictionary *)arguments {
     return [self executeUpdate:sql error:nil withArgumentsInArray:nil orDictionary:arguments orVAList:nil];
 }
@@ -1312,7 +1334,9 @@ static NSString *FMDBEscapeSavePointName(NSString *savepointName) {
         return err;
     }
     
-    block(&shouldRollback);
+    if (block) {
+        block(&shouldRollback);
+    }
     
     if (shouldRollback) {
         // We need to rollback and release this savepoint to remove it
@@ -1353,7 +1377,9 @@ void FMDBBlockSQLiteCallBackFunction(sqlite3_context *context, int argc, sqlite3
 #else
     void (^block)(sqlite3_context *context, int argc, sqlite3_value **argv) = (__bridge id)sqlite3_user_data(context);
 #endif
-    block(context, argc, argv);
+    if (block) {
+        block(context, argc, argv);
+    }
 }
 
 
