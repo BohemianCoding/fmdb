@@ -1089,7 +1089,7 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
         
         [self setCachedStatement:cachedStmt forQuery:sql];
         
-        FMDBRelease(cachedStmt);
+        FMDBAutorelease(cachedStmt);
     }
     
     int closeErrorCode;
