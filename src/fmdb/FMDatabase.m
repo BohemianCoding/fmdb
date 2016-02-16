@@ -337,20 +337,21 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
 
 
 - (void)setCachedStatement:(FMStatement*)statement forQuery:(NSString*)query {
-    
-    query = [query copy]; // in case we got handed in a mutable string...
-    [statement setQuery:query];
-    
-    NSMutableSet* statements = [_cachedStatements objectForKey:query];
-    if (!statements) {
-        statements = [NSMutableSet set];
+    if (query) { // TODO: this is to keep the analyzer happy - it would be better to mark query as __nonnull, but that's a bigger change
+        query = [query copy]; // in case we got handed in a mutable string...
+        [statement setQuery:query];
+
+        NSMutableSet* statements = [_cachedStatements objectForKey:query];
+        if (!statements) {
+            statements = [NSMutableSet set];
+        }
+
+        [statements addObject:statement];
+
+        [_cachedStatements setObject:statements forKey:query];
+        
+        FMDBRelease(query);
     }
-    
-    [statements addObject:statement];
-    
-    [_cachedStatements setObject:statements forKey:query];
-    
-    FMDBRelease(query);
 }
 
 #pragma mark Key routines
