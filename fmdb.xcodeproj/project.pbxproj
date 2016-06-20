@@ -21,6 +21,7 @@
 		227927E51C1AD7920042DAF0 /* libFMDB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4290EF12B42F870088BD94 /* libFMDB.a */; };
 		227927E61C1AD7920042DAF0 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF5D041818416BB2008C5AA9 /* XCTest.framework */; };
 		227927E81C1AD7920042DAF0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF5D041D18416BB2008C5AA9 /* InfoPlist.strings */; };
+		22CFA17E1D184A9D00BCE0F9 /* module.modulemap in CopyFiles */ = {isa = PBXBuildFile; fileRef = 22CFA17C1D184A0700BCE0F9 /* module.modulemap */; };
 		40A145FE1BE5759400E5D35E /* FMDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = CCC24EBA0A13E34D00A6D3E3 /* FMDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40A146001BE575D000E5D35E /* FMDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = CCC24EBA0A13E34D00A6D3E3 /* FMDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40A146011BE575D600E5D35E /* FMResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = CCC24EBF0A13E34D00A6D3E3 /* FMResultSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -70,6 +71,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		22CFA17D1D184A8500BCE0F9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+				22CFA17E1D184A9D00BCE0F9 /* module.modulemap in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6290CBB3188FE836009790F8 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -94,6 +105,7 @@
 /* Begin PBXFileReference section */
 		08FB779EFE84155DC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		227927EC1C1AD7920042DAF0 /* FMDB Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FMDB Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		22CFA17C1D184A0700BCE0F9 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = src/fmdb/module.modulemap; sourceTree = "<group>"; };
 		32A70AAB03705E1F00C91783 /* fmdb_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fmdb_Prefix.pch; path = src/sample/fmdb_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		3354379B19E71096005661F3 /* FMResultSetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSetTests.m; sourceTree = "<group>"; };
 		6290CBB5188FE836009790F8 /* libFMDB-IOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libFMDB-IOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -188,6 +200,7 @@
 				CC8C138B0E3135C400FBE1E7 /* LICENSE.txt */,
 				CC8C138A0E3135C400FBE1E7 /* CHANGES_AND_TODO_LIST.txt */,
 				CC8C138C0E3135C400FBE1E7 /* CONTRIBUTORS.txt */,
+				22CFA17C1D184A0700BCE0F9 /* module.modulemap */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859EA2029092E104C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
@@ -434,6 +447,7 @@
 				EE4290EB12B42F870088BD94 /* Headers */,
 				EE4290EC12B42F870088BD94 /* Sources */,
 				EE4290ED12B42F870088BD94 /* Frameworks */,
+				22CFA17D1D184A8500BCE0F9 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -804,10 +818,11 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEFINES_MODULE = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = FMDB;
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(PRODUCT_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -820,8 +835,9 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				PRODUCT_NAME = FMDB;
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(PRODUCT_NAME)";
 				SKIP_INSTALL = YES;
 				ZERO_LINK = NO;
 			};
