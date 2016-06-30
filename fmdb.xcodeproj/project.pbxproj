@@ -75,7 +75,7 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "${PRODUCT_NAME}";
-			dstSubfolderSpec = 16;
+			dstSubfolderSpec = 1;
 			files = (
 				22CFA17E1D184A9D00BCE0F9 /* module.modulemap in CopyFiles */,
 			);
